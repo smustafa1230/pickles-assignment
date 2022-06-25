@@ -1,0 +1,62 @@
+tags:
+- name: email
+  description: Email API
+
+paths:
+# [GET] ping
+  /api/v1:
+    get:
+      tags:
+      - ping
+      summary: Ping
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] send-email
+  /api/v1/send-email:  
+    post:
+      tags:
+      - send-email
+      summary: Send Email
+      parameters:
+      - name: body
+        in: body
+        description: Data
+        required: true
+        schema:
+          $ref: '#/definitions/email'
+      responses:
+        201:
+          description: 'sent'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  email:
+    type: object
+    required:
+        - templateName
+        - sendTo
+        - data
+    properties:
+      templateName:
+        type: string
+        description: Email template Name
+      sendTo:
+        type: string
+        description: Email address
+      data:
+        type: object
+        description: Dynamic data to replace in email template
+
+schemes:
+ - https
+ - http
