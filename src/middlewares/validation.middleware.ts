@@ -3,6 +3,15 @@ import { validate, ValidationError } from 'class-validator';
 import { RequestHandler } from 'express';
 import { HttpException } from '@exceptions/HttpException';
 
+/**
+ * validation middleware
+ * @param type
+ * @param value
+ * @param skipMissingProperties
+ * @param whitelist
+ * @param forbidNonWhitelisted
+ * @returns
+ */
 const validationMiddleware = (
   type: any,
   value: string | 'body' | 'query' | 'params' = 'body',
@@ -13,7 +22,6 @@ const validationMiddleware = (
   return (req, res, next) => {
     validate(plainToClass(type, req[value]), { skipMissingProperties, whitelist, forbidNonWhitelisted }).then((errors: ValidationError[]) => {
       if (errors.length > 0) {
-        // const message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(', ');
         next(new HttpException(400, errors));
       } else {
         next();

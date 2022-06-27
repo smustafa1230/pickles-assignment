@@ -1,14 +1,16 @@
 import { Service } from 'typedi';
 import Email from 'email-templates';
 import path from 'path';
-import { logger } from '@/utils/logger';
 
 @Service()
 class EmailService {
-  constructor() {
-    const message = 'hi';
-    logger.info('message', message);
-  }
+  /**
+   *
+   * @param template:string email template name
+   * @param data:object data object to replace dynamic values in email template
+   * @param to:string where to send email
+   * @returns Promise<object>
+   */
   public async sendEmail(template: string, data: Object, to: string): Promise<any> {
     // we can get email templates from database as well and can replace required variables with values
     const email = new Email({
@@ -23,7 +25,7 @@ class EmailService {
     });
 
     return email.send({
-      template: `${path.resolve('src')}/emails/${template}`,
+      template: `${path.resolve('src')}/emails/${template}`, // email templates which are placed in separate folder
       message: {
         to,
         // can send attachemnts as well if we receive it from api consumer

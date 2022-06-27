@@ -10,6 +10,7 @@ class IndexRoute implements Routes {
   public path = '/';
   public router = Router();
 
+  //Dependency injection using typedi
   public indexController = Container.get(IndexController);
 
   constructor() {

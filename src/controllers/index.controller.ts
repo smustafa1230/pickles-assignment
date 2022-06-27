@@ -2,7 +2,6 @@ import { Service } from 'typedi';
 import { SendEmailDto } from '@dtos/email.dto';
 import { NextFunction, Request, Response } from 'express';
 import EmailService from '@services/email.service';
-import { logger } from '@/utils/logger';
 
 @Service()
 class IndexController {
@@ -15,13 +14,17 @@ class IndexController {
       next(error);
     }
   };
+  /**
+   * send email using email templates
+   * @param req
+   * @param res
+   * @param next
+   * @returns
+   */
   public sendEmail = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
       const body: SendEmailDto = req.body;
-      logger.info('hiii', req);
-
       const emailStatus = await this.emailService.sendEmail(body.templateName, body.data, body.sendTo);
-      logger.info('emailstatus', emailStatus);
       if (emailStatus.messageId) {
         return res.json({ emailStatus });
       }
